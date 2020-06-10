@@ -16,13 +16,13 @@ import java.io.IOException;
 public class SourceRepositorySimpleValueRedis
 {
     private final RedisMigrationSaver redisMigrationSaver;
-    private final StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate sourceRedisTemplate;
     private final ReactiveStringRedisTemplate sourceRedisTemplateReactive;
 
     public void migrate(String pattern)
     {
         ScanOptions options = buildScanOptions(pattern);
-        stringRedisTemplate.getConnectionFactory()
+        sourceRedisTemplate.getConnectionFactory()
                            .getConnection()
                            .keyCommands()
                            .scan(options)
