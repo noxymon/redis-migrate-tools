@@ -23,6 +23,9 @@ public class RedisMigrateToolsApplication
     @Value("${max.thread}")
     Integer maxThread;
 
+    @Value("${max.queue}")
+    Integer maxQueue;
+
     public static void main(String[] args)
     {
         SpringApplication.run(RedisMigrateToolsApplication.class, args);
@@ -33,7 +36,7 @@ public class RedisMigrateToolsApplication
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(maxThread);
-        executor.setQueueCapacity(500);
+        executor.setQueueCapacity(maxQueue);
         executor.setThreadNamePrefix("RedisMigrate-");
         executor.initialize();
         return executor;
