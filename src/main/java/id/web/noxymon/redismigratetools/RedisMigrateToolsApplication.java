@@ -36,7 +36,6 @@ public class RedisMigrateToolsApplication
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(maxThread);
-        executor.setQueueCapacity(maxQueue);
         executor.setThreadNamePrefix("RedisMigrate-");
         executor.initialize();
         return executor;
