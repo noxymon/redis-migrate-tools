@@ -23,7 +23,7 @@ public class RedisMigrationSaver
     public Future<Void> migrateKey(byte[] content) throws IOException
     {
         final byte[] dump = sourceRedisTemplate.dump(new String(content));
-        FileUtils.writeByteArrayToFile(new File("generated/gen.dump"), dump);
+        FileUtils.writeByteArrayToFile(new File("generated/gen.dump"), dump, true);
         return new AsyncResult<Void>(null);
     }
 }
