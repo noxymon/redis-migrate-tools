@@ -20,12 +20,15 @@ public class RedisMigrationSaver
     public void migrateKey(byte[] content)
     {
         final String redisKey = new String(content);
-        targetRedisTemplate
-                .restore(
-                        redisKey, sourceRedisTemplate.dump(redisKey),
-                        0, TimeUnit.DAYS,
-                        true
-                );
-        log.info("Hasilnya : " + redisKey);
+        final byte[] dump = sourceRedisTemplate.dump(redisKey);
+        if(dump != null || dump.length > 0){
+            targetRedisTemplate
+                    .restore(
+                            redisKey, dump,
+                            0, TimeUnit.DAYS,
+                            true
+                    );
+            log.info("Hasilnya : " + redisKey);
+        }
     }
 }
