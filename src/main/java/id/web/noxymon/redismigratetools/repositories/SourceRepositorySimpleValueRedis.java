@@ -7,7 +7,6 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class SourceRepositorySimpleValueRedis
@@ -25,7 +24,6 @@ public class SourceRepositorySimpleValueRedis
                 .getConnection()
                 .scan(options)
                 .forEachRemaining(content -> {
-                    log.info("Migrating keys " + new String(content));
                     redisMigrationSaver.migrateKey(content);
                 });
     }
