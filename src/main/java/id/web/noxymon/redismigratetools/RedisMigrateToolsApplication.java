@@ -2,6 +2,7 @@ package id.web.noxymon.redismigratetools;
 
 import id.web.noxymon.redismigratetools.repositories.SourceRepositorySimpleValueRedis;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -19,6 +20,9 @@ public class RedisMigrateToolsApplication
     @Autowired
     SourceRepositorySimpleValueRedis sourceRepositorySimpleValueRedis;
 
+    @Value("${max.thread}")
+    Integer maxThread;
+
     public static void main(String[] args)
     {
         SpringApplication.run(RedisMigrateToolsApplication.class, args);
@@ -28,7 +32,7 @@ public class RedisMigrateToolsApplication
     public Executor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(32);
+        executor.setMaxPoolSize(maxThread);
         executor.setQueueCapacity(500);
         executor.setThreadNamePrefix("RedisMigrate-");
         executor.initialize();
