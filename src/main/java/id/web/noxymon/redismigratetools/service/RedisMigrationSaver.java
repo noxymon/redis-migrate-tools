@@ -19,6 +19,7 @@ public class RedisMigrationSaver
 {
     private final StringRedisTemplate sourceRedisTemplate;
 
+    @Async
     public Future<Void> migrateKey(byte[] content) throws IOException
     {
         final byte[] dump = sourceRedisTemplate.dump(new String(content));

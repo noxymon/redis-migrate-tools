@@ -13,6 +13,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
+@EnableAsync
 @SpringBootApplication
 public class RedisMigrateToolsApplication
 {
@@ -33,15 +34,15 @@ public class RedisMigrateToolsApplication
         SpringApplication.run(RedisMigrateToolsApplication.class, args);
     }
 
-//    @Bean
-//    public Executor taskExecutor() {
-//        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-//        executor.setCorePoolSize(2);
-//        executor.setMaxPoolSize(maxThread);
-//        executor.setThreadNamePrefix("RedisMigrate-");
-//        executor.initialize();
-//        return executor;
-//    }
+    @Bean
+    public Executor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(maxThread);
+        executor.setThreadNamePrefix("RedisMigrate-");
+        executor.initialize();
+        return executor;
+    }
 
     @EventListener(ApplicationReadyEvent.class)
     public void method()
