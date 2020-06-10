@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -17,7 +19,7 @@ public class RedisMigrationSaver
     private final StringRedisTemplate targetRedisTemplate;
 
     @Async
-    public void migrateKey(byte[] content)
+    public Future<Void> migrateKey(byte[] content)
     {
         final String redisKey = new String(content);
         final byte[] dump = sourceRedisTemplate.dump(redisKey);
@@ -30,5 +32,6 @@ public class RedisMigrationSaver
                     );
             log.info("Hasilnya : " + redisKey);
         }
+        return new AsyncResult<Void>(null);
     }
 }
