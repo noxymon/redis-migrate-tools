@@ -26,6 +26,9 @@ public class RedisMigrateToolsApplication
     @Value("${max.queue}")
     Integer maxQueue;
 
+    @Value("${pattern}")
+    String pattern;
+
     public static void main(String[] args)
     {
         SpringApplication.run(RedisMigrateToolsApplication.class, args);
@@ -44,7 +47,7 @@ public class RedisMigrateToolsApplication
     @EventListener(ApplicationReadyEvent.class)
     public void method()
     {
-        sourceRepositorySimpleValueRedis.migrate("stock:*");
+        sourceRepositorySimpleValueRedis.migrate(pattern);
     }
 
 }
