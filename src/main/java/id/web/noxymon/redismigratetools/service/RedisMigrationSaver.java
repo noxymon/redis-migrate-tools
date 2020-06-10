@@ -1,12 +1,16 @@
 package id.web.noxymon.redismigratetools.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -16,21 +20,15 @@ import java.util.concurrent.TimeUnit;
 public class RedisMigrationSaver
 {
     private final StringRedisTemplate sourceRedisTemplate;
-    private final StringRedisTemplate targetRedisTemplate;
 
     @Async
     public Future<Void> migrateKey(byte[] content)
     {
-        final String redisKey = new String(content);
-        final byte[] dump = sourceRedisTemplate.dump(redisKey);
-        if(dump != null || dump.length > 0){
-            targetRedisTemplate
-                    .restore(
-                            redisKey, dump,
-                            0, TimeUnit.DAYS,
-                            true
-                    );
-            log.info("Hasilnya : " + redisKey);
+        final byte[] dump = sourceRedisTemplate.dump(new String(content));
+        try {
+            FileUtils.writeByteArrayToFile(new File("generated/gen.dump"), dump, true);
+        } catch (IOException e) {
+            log.error("Error at " + e.getMessage());
         }
         return new AsyncResult<Void>(null);
     }

@@ -2,10 +2,12 @@ package id.web.noxymon.redismigratetools.repositories;
 
 import id.web.noxymon.redismigratetools.service.RedisMigrationSaver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class SourceRepositorySimpleValueRedis
@@ -15,7 +17,6 @@ public class SourceRepositorySimpleValueRedis
 
     public void migrate(String pattern)
     {
-        //final Long currentDbSize = sourceRedisTemplate.getConnectionFactory().getConnection().dbSize();
         ScanOptions options = ScanOptions.scanOptions()
                                          .match(pattern)
                                          .build();
@@ -24,6 +25,7 @@ public class SourceRepositorySimpleValueRedis
                 .getConnection()
                 .scan(options)
                 .forEachRemaining(content -> {
+                    log.info("Migrating keys " + new String(content));
                     redisMigrationSaver.migrateKey(content);
                 });
     }
